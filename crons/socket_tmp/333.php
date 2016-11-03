@@ -1,0 +1,1 @@
+<?php $SOCKET_CONNECT = 'Resource id #20';
