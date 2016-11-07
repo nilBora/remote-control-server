@@ -4,10 +4,13 @@ class ClientSocket extends Controller
 	private $_socket = null;
 	private $_token = null;
 
-	public function initClientSocket(&$token)
+	public function init()
 	{
-		$this->_token = $token;
+		$this->_token = $this->controller->User->getCurrentUserToken();
+
 		$this->_socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+
+		return true;
 	}
 	
 	public function send($command = false)

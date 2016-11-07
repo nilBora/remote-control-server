@@ -24,60 +24,6 @@ class Main extends Controller
         echo $this->fetch('login.phtml');
     }
 
-    public function displayIndex()
-    {
-        $idUser = $this->getUserID();
-
-        $vars = array(
-
-        );
-        echo $this->fetchMain('index.phtml', $vars);
-    }
-
-    public function doControlVolPlus()
-    {
-        $idUser = $this->getUserID();
-
-        $user = $this->controller->User->getUserByID($idUser);
-
-        $clientSocket = $this->controller->ClientSocket;
-        $clientSocket->initClientSocket($user['access_token']);
-        $clientSocket->send("vol_plus");
-    }
-
-    public function doControlVolMinus()
-    {
-        $idUser = $this->getUserID();
-
-        $user =$user = $this->controller->User->getUserByID($idUser);
-
-        $clientSocket = $this->controller->ClientSocket;
-        $clientSocket->initClientSocket($user['access_token']);
-        $clientSocket->send("vol_minus");
-    }
-
-    public function doControlGibernation()
-    {
-        $idUser = $this->getUserID();
-
-        $user = $user = $this->controller->User->getUserByID($idUser);
-
-        $clientSocket = $this->controller->ClientSocket;
-        $clientSocket->initClientSocket($user['access_token']);
-        $clientSocket->send("gibernation");
-    }
-
-    public function doControlShutdown()
-    {
-        $idUser = $this->getUserID();
-
-        $user = $user = $this->controller->User->getUserByID($idUser);
-
-        $clientSocket = $this->controller->ClientSocket;
-        $clientSocket->initClientSocket($user['access_token']);
-        $clientSocket->send("shutdown");
-    }
-
     public function apiLogin()
     {
         if (empty($_POST['login']) && empty($_POST['password'])) {
@@ -97,8 +43,8 @@ class Main extends Controller
         }
     }
 
-    public function test()
+    public function tests()
     {
-        echo 1;
+        echo 1111;
     }
 }

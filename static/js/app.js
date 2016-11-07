@@ -3,7 +3,8 @@ var APP = {
 	doVolPlus: function() {
 		$('#vol_plus').on('click', function(e) {
 			e.preventDefault();
-			$.get('/vol_plus/', function(data) {
+			var url = $(this).data('url');
+			$.get(url, function(data) {
 			
 			});
 		});
@@ -12,6 +13,7 @@ var APP = {
 	doVolMinus: function() {
 		$('#vol_minus').on('click', function(e) {
 			e.preventDefault();
+			var url = $(this).data('url');
 			$.get('/vol_minus/', function(data) {
 			
 			});
@@ -22,7 +24,8 @@ var APP = {
 		$('#gibernation').on('click', function(e) {
 			e.preventDefault();
 			if (confirm('You have gibernation?')) {
-				$.get('/gibernation/', function(data) {
+				var url = $(this).data('url');
+				$.get(url, function(data) {
 				
 				});
 			}
@@ -33,7 +36,8 @@ var APP = {
 		$('#shutdown').on('click', function(e) {
 			e.preventDefault();
 			if (confirm('You have shutdown?')) {
-				$.get('/shutdown/', function(data) {
+				var url = $(this).data('url');
+				$.get(url, function(data) {
 				
 				});
 			}

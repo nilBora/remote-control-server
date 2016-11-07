@@ -23,6 +23,12 @@ class Controller extends Dispatcher
 
     public function getUserID()
     {
+        //OLD
+        return $this->_core->getUserID();
+    }
+
+    public function getCurrentUserID()
+    {
         return $this->_core->getUserID();
     }
 

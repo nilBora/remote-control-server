@@ -8,6 +8,7 @@ define('BUNDLE_DIR', COMMON_DIR.'bundle/');
 define('TEMPLATE_DIR', ROOT_DIR.'templates/');
 define('CRONS_DIR', ROOT_DIR.'crons/');
 define('CRON_SOCKET_TMP_DIR', CRONS_DIR.'socket_tmp/');
+define('CORE_DIR', COMMON_DIR.'core/');
 
 /* SOCKET CONFIG START */
 define('SOCKET_SERVER_HOST', 'remote.control.server.local');
@@ -16,24 +17,14 @@ define('SOCKET_SERVER_PORT', '8000');
 
 require_once "config.php";
 
-require_once COMMON_DIR.'core/Dispatcher.php';
+require_once CORE_DIR.'Dispatcher.php';
 require_once COMMON_DIR.'Controller.php';
-require_once COMMON_DIR.'core/Route.php';
+require_once CORE_DIR.'Route.php';
 require_once COMMON_DIR.'Object.php';
 require_once COMMON_DIR.'Core.php';
-
-
-
-//require_once BUNDLE_DIR.'User/UserObject.php';
-//require_once BUNDLE_DIR.'User/User.php';
-
-//require_once BUNDLE_DIR.'Queue/QueueObject.php';
-//require_once BUNDLE_DIR.'Queue/Queue.php';
+require_once CORE_DIR.'ValuesObject.php';
 
 require_once BUNDLE_DIR.'ServerSocket/ServerSocket.php';
-//require_once BUNDLE_DIR.'ClientSocket/ClientSocket.php';
-
-//require_once BUNDLE_DIR.'Main/Main.php';
 
 $db = new PDO(
     $GLOBALS['db'],

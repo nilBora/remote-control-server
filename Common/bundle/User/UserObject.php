@@ -6,6 +6,10 @@ class UserObject extends Object
 
     public function get($search)
     {
+        if (is_scalar($search)) {
+            $search = array('id' => $search);
+        }
+
         $sql = "SELECT * FROM ".$this->_tableName;
 
         return $this->select($sql, $search);

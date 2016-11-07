@@ -102,6 +102,17 @@ class Core extends Dispatcher
 				$instanceBundleObject = new $nameObject();
 				$this->controller->$nameController->object = $instanceBundleObject;
 			}
+
+			$this->_doIncludeValuesObject($dirPath, $nameController);
+		}
+	}
+
+	private function _doIncludeValuesObject($dirPath, $nameController)
+	{
+		$valuesObject = $nameController . 'ValuesObject';
+		if ($this->_isExistsPHPFileByPath($dirPath . $valuesObject)) {
+
+			require_once $dirPath . $valuesObject . ".php";
 		}
 	}
 
@@ -123,6 +134,7 @@ class Core extends Dispatcher
 			'User',
 			'ServerSocket',
 			'Main',
+			'RemoteControl'
 		);
 
 		return $bundles;

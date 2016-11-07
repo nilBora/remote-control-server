@@ -3,6 +3,7 @@
 class Route
 {
     private $_requestUri;
+    private static $_routes = array();
 
     public function pareseUrl()
     {
@@ -10,17 +11,8 @@ class Route
 
         /* uri => array('controller'  => 'method') */
         $result = array();
-        $routes = array(
-            '/'		   		=> array('use' => 'Main@displayIndex', 'auth'=>true),
-            '/login/'  		=> array('use' => 'User@login', 'auth'=>true),
-            '/logout/'  	=> array('use' => 'User@logout', 'auth'=>true),
-            '/vol_plus/'    => array('use' => 'Main@doControlVolPlus', 'auth'=>true),
-            '/vol_minus/'   => array('use' => 'Main@doControlVolMinus', 'auth'=>true),
-            '/gibernation/' => array('use' => 'Main@doControlGibernation', 'auth'=>true),
-            '/shutdown/'    => array('use' => 'Main@doControlShutdown', 'auth'=>true),
-            '/api/login/'   => array('use' => 'Main@apiLogin', 'auth'=>false),
-            '/test/'        => array('use' => 'Main@test', 'auth'=>false)
-        );
+
+        $routes = $this->_getRoutes();
 
         foreach ($routes as $uri => $config) {
             if ($uri == $this->_requestUri) {
@@ -43,31 +35,23 @@ class Route
         }
 
         return $result;
-        //$pattern =  "#".$this->_requestUri."#Umis";
-        //preg_match($pattern, $uri, $matches);
+    }
 
+    public static function get($url, $params=array())
+    {
+        if (array_key_exists($url,static::$_routes )) {
+            throw new Exception('Route is Exists: '.$url);
+        }
+        static::$_routes[$url] = $params;
+    }
 
+    private function _getRoutes()
+    {
+        $routes = array();
+        require_once COMMON_DIR.'routes.php';
 
-//            if (!$this->_isAuthInSessionData()) {
-//                $this->displayLogin();
-//                if ($this->_requestUri == '/login/') {
-//                    $this->login();
-//                }
-//            } else {
-//                if (!array_key_exists($this->_requestUri, $uri)) {
-//                    $this->display404();
-//                }
-//
-//                $params = $uri[$this->_requestUri];
-//
-//                foreach ($params as $controller => $method) {
-//                    if (!method_exists($controller, $method)) {
-//                        $this->display404();
-//                    }
-//                    $this->$method();
-//                }
-//
-//
-//            }
+        static::$_routes = array_merge(static::$_routes, $routes);
+
+        return static::$_routes;
     }
 }

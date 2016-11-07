@@ -18,7 +18,6 @@ class User extends Controller
 			}
 		}
 
-
 		echo $this->fetch('login.phtml');
 
 	}
@@ -79,5 +78,31 @@ class User extends Controller
 		);
 
 		return $this->object->updateUser($search, $values);
+	}
+
+	public function getCurrentUserToken()
+	{
+		$idUser = $this->getCurrentUserID();
+
+		$userValuesObject = $this->controller->User->loadRow($idUser);
+
+		return $userValuesObject->getAccessToken();
+	}
+
+	public function get($search)
+	{
+		return $this->object->get($search);
+	}
+
+	public function loadRow($search)
+	{
+		$data = $this->get($search);
+
+		return new UserValuesObject($data);
+	}
+
+	public function load()
+	{
+
 	}
 }
