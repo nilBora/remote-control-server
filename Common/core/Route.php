@@ -7,15 +7,17 @@ class Route
 
     public function pareseUrl()
     {
-        $this->_requestUri = $_SERVER['REQUEST_URI'];
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $requestUriArray = explode('?', $requestUri);
 
+        $currentUri = $requestUriArray[0];
         /* uri => array('controller'  => 'method') */
         $result = array();
 
         $routes = $this->_getRoutes();
 
         foreach ($routes as $uri => $config) {
-            if ($uri == $this->_requestUri) {
+            if ($uri == $currentUri) {
 
                 $use = explode('@', $config['use']);
 

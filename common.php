@@ -4,8 +4,9 @@ if (!session_id()) {
 }
 define('ROOT_DIR', __DIR__.'/');
 define('COMMON_DIR', ROOT_DIR.'Common/');
-define('BUNDLE_DIR', COMMON_DIR.'bundle/');
+define('BUNDLE_DIR', ROOT_DIR.'bundle/');
 define('TEMPLATE_DIR', ROOT_DIR.'templates/');
+define('THEME_DIR', ROOT_DIR.'theme/');
 define('CRONS_DIR', ROOT_DIR.'crons/');
 define('CRON_SOCKET_TMP_DIR', CRONS_DIR.'socket_tmp/');
 define('CORE_DIR', COMMON_DIR.'core/');
@@ -22,9 +23,19 @@ require_once COMMON_DIR.'Controller.php';
 require_once CORE_DIR.'Route.php';
 require_once COMMON_DIR.'Object.php';
 require_once COMMON_DIR.'Core.php';
-require_once CORE_DIR.'ValuesObject.php';
+require_once CORE_DIR.'AbstractController.php';
+require_once CORE_DIR.'Display.php';
 
+require_once CORE_DIR.'ValuesObject.php';
+require_once CORE_DIR . 'libs/Exception.php';
+require_once CORE_DIR . 'libs/SystemLog.php';
+require_once CORE_DIR . 'libs/System.php';
 require_once BUNDLE_DIR.'ServerSocket/ServerSocket.php';
+
+#require_once ROOT_DIR.'libs/minify/src/Minify.php';
+#require_once ROOT_DIR.'libs/minify/src/JS.php';
+#require_once ROOT_DIR.'libs/minify/src/CSS.php';
+require_once ROOT_DIR.'libs/minify/vendor/autoload.php';
 
 $db = new PDO(
     $GLOBALS['db'],

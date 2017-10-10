@@ -1,0 +1,33 @@
+<!-- Small boxes (Stat box) -->
+<div class="row">
+
+    <div class="col-md-12">
+        <?php if (!$isSocketStart) { ?>
+        <div class="callout callout-danger">
+            <p>No connect to the server!</p>
+        </div>
+        <?php } ?>
+        <div class="box">
+            <div class="box-body">
+
+                <a class="btn btn-app js-send-command" data-command="<?php echo static::COMMAND_VOL_PLUS; ?>">
+                    <i class="fa fa-volume-up"></i> Vol++
+                </a>
+                <a class="btn btn-app js-send-command" data-command="<?php echo static::COMMAND_VOL_MINUS; ?>">
+                    <i class="fa fa-volume-down"></i> Vol--
+                </a>
+                <a class="btn btn-app js-send-command" data-command="<?php echo static::COMMAND_MUTE; ?>">
+                    <i class="fa fa-volume-off"></i> Mute
+                </a>
+                <a class="btn btn-app js-send-command" data-confirm="You have Hibernation?" data-command="<?php echo static::COMMAND_HIBERNATION; ?>">
+                    <i class="fa fa-home"></i> Hibernation
+                </a>
+                <a class="btn btn-app js-send-command" data-confirm="You have shutdown?" data-command="<?php echo static::COMMAND_SHUTDOWN; ?>">
+                    <i class="fa fa-power-off"></i> Shutdown
+                </a>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+</div>
+<!-- /.row -->

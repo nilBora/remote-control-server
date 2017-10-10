@@ -1,61 +1,32 @@
 
 var APP = {
-	doVolPlus: function() {
-		$('#vol_plus').on('click', function(e) {
+	doSendCommand: function() {
+		$('.js-send-command').on('click', function(e) {
 			e.preventDefault();
-			var url = $(this).data('url');
-			$.get(url, function(data) {
-			
-			});
-		});
-	},
-	
-	doVolMinus: function() {
-		$('#vol_minus').on('click', function(e) {
-			e.preventDefault();
-			var url = $(this).data('url');
-			$.get('/vol_minus/', function(data) {
-			
-			});
-		});
-	},
-	
-	doGibernation: function() {
-		$('#gibernation').on('click', function(e) {
-			e.preventDefault();
-			if (confirm('You have gibernation?')) {
-				var url = $(this).data('url');
-				$.get(url, function(data) {
-				
-				});
+			var data = {};
+			var $confirm;
+			data['command'] = $(this).data('command');
+
+			if ($(this).data('confirm') ) {
+				$confirm = $(this).data('confirm');
 			}
-		});
-	},
-	
-	doShutdown: function() {
-		$('#shutdown').on('click', function(e) {
-			e.preventDefault();
-			if (confirm('You have shutdown?')) {
-				var url = $(this).data('url');
-				$.get(url, function(data) {
-				
-				});
+
+			if ( $(this).data('confirm') && confirm( $(this).data('confirm'))) {
+
+				Core.corePost('/send/command/', data, function(response) {
+					console.log(1);
+				})
+			} else {
+				Core.corePost('/send/command/', data, function(response) {
+					console.log(1);
+				})
 			}
 		});
 	}
+
+
 }
 
 $(function() {
-	APP.doVolPlus();
-	APP.doVolMinus();
-	APP.doGibernation();
-	APP.doShutdown();
+	APP.doSendCommand();
 })
-
-  
-	
-	
-	
-	
-	
-	

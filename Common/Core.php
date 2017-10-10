@@ -8,7 +8,8 @@ class Core extends Dispatcher
 	protected $_sessionData = null;
 	private $_layout = 'layout.phtml';
 	public $socketInstance = null;
-	public $controller = null;
+	protected $controller = null;
+	protected $bundle = null;
 
 	public function __construct()
 	{
@@ -24,6 +25,8 @@ class Core extends Dispatcher
 		} else {
 			$this->_sessionData = $_SESSION['sessionData'];
 		}
+
+		$this->bundle = new stdClass();
 	}
 
 	public static function getInstance()
@@ -37,29 +40,35 @@ class Core extends Dispatcher
 
 	public function start()
 	{
-
 		$this->controller = new Controller();
 		$this->_initBundles();
 
 		$route = new Route();
 		$currentRouteConfig = $route->pareseUrl();
 
-		if ($currentRouteConfig && method_exists($currentRouteConfig['controller'], $currentRouteConfig['method'])) {
+		if ($this->_hasExistMethodControllerByConfig($currentRouteConfig)) {
 
 			if ($this->_isAuthRoute($currentRouteConfig)) {
-				$main = $this->controller->User;
+				$main = $this->bundle->User;
 				$main->login();
 				return true;
 			}
 
-			$controller = $this->controller->$currentRouteConfig['controller'];
+			$controller = $this->bundle->$currentRouteConfig['controller'];
 			$method = $currentRouteConfig['method'];
 			$controller->$method();
 			return true;
 		}
+		throw new NotFoundException();
+	}
 
-		$this->controller->display404();
-		return true;
+	private function _hasExistMethodControllerByConfig($currentRouteConfig)
+	{
+		return $currentRouteConfig &&
+		 	   method_exists(
+				   $currentRouteConfig['controller'],
+				   $currentRouteConfig['method']
+			   );
 	}
 
 	private function _isAuthRoute($currentRouteConfig)
@@ -80,31 +89,47 @@ class Core extends Dispatcher
 			$nameController = $dir;
 
 			if (!$this->_isExistsPHPFileByPath($dirPath . $nameController)) {
-				throw new Exception('Not file controller ' . $dirPath . $nameController);
+				throw new SystemException('Not file controller ' . $dirPath . $nameController);
 			}
 			if (class_exists($nameController)) {
 				continue;
 			}
 
-			require_once $dirPath . $nameController . ".php";
+			$this->_doCreateBundlesInstance($dirPath, $nameController);
 
-			$instanceBundle = new $nameController();
+			$this->_doCreateObjectsBundlesInstance($dirPath, $nameController);
 
-			$this->controller->$nameController = $instanceBundle;
-
-			$nameObject = $nameController . 'Object';
-			if ($this->_isExistsPHPFileByPath($dirPath . $nameObject)) {
-				if (class_exists($nameObject)) {
-					continue;
-				}
-
-				require_once $dirPath . $nameObject . ".php";
-				$instanceBundleObject = new $nameObject();
-				$this->controller->$nameController->object = $instanceBundleObject;
-			}
 
 			$this->_doIncludeValuesObject($dirPath, $nameController);
 		}
+	}
+
+	private function _doCreateBundlesInstance($dirPath, $nameController)
+	{
+		require_once $dirPath . $nameController . ".php";
+
+		$instanceBundle = new $nameController($dirPath);
+
+		$this->bundle->$nameController = $instanceBundle;
+
+		return true;
+	}
+
+	private function _doCreateObjectsBundlesInstance($dirPath, $nameController)
+	{
+		$nameObject = $nameController . 'Object';
+		if ($this->_isExistsPHPFileByPath($dirPath . $nameObject)) {
+			if (class_exists($nameObject)) {
+				return false;
+			}
+
+			require_once $dirPath . $nameObject . ".php";
+			$instanceBundleObject = new $nameObject();
+
+			$this->bundle->$nameController->object = $instanceBundleObject;
+		}
+
+		return true;
 	}
 
 	private function _doIncludeValuesObject($dirPath, $nameController)
@@ -160,6 +185,11 @@ class Core extends Dispatcher
 		return false;
 	}
 
+	public function getUser()
+	{
+		return 1;
+	}
+
 	private function _isAuthInSessionData()
 	{
 		return array_key_exists('auth', $this->_sessionData)
@@ -175,5 +205,19 @@ class Core extends Dispatcher
 	private function _isUrlInRequest()
 	{
 		return array_key_exists('url', $this->_request);
+	}
+
+	public function doClearSession()
+	{
+		unset($_SESSION['sessionData']['auth']);
+		unset($this->_core->_sessionData['auth']);
+		unset($this->_core->_sessionData['user_id']);
+
+		return true;
+	}
+
+	public function getBundles()
+	{
+		return $this->bundle;
 	}
 }
